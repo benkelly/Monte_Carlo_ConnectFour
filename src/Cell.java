@@ -6,12 +6,71 @@ import java.util.List;
  */
 public class Cell  {
 
+	boolean isNonExistent = false;
+	boolean isYellow = false;
+	boolean isRed = false;
+
+	private static String[] strMarkers = {" ", "#", "Y", "R"};
+
 	public Cell() {
 
 	}
 
+	public void setNonExistent(boolean bool) {
+		isNonExistent = bool;
+	}
+
+	public boolean isCellOccupied() {
+		if(isNonExistent) return true;
+		if(isYellow) return true;
+		if(isRed) return true;
+		return false;
+	}
+
+	public String FancytoString() {
+		String occupied;
+		if(isNonExistent) occupied = strMarkers[1];
+		else if(isYellow) occupied = strMarkers[2];
+		else if(isRed) occupied = strMarkers[3];
+		else occupied = strMarkers[0];
+
+		String str = "";
+		str +=" -------\n|\t \t|\n|\t"+occupied+"\t|\n|\t \t|\n -------";
+
+		return str;
+	}
+
+	public String toString() {
+		String occupied;
+		if(isNonExistent) occupied = strMarkers[1];
+		else if(isYellow) occupied = strMarkers[2];
+		else if(isRed) occupied = strMarkers[3];
+		else occupied = strMarkers[0];
+
+		String str = "";
+		str +="["+occupied+"]";
+
+		return str;
+	}
+
+	// class test
+	public static void main(String[] args) {
+		System.out.println("Board!");
+		Cell cell = new Cell();
+
+		System.out.println(cell);
+		cell.isNonExistent = true;
+		System.out.println(cell);
+		cell.isNonExistent = false;
 
 
+		cell.isYellow = true;
+		System.out.println(cell);
+		cell.isYellow = false;
 
+		cell.isRed = true;
+		System.out.println(cell);
+
+	}
 
 }
