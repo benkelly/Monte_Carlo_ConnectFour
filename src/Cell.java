@@ -10,6 +10,8 @@ public class Cell  {
 	boolean isYellow = false;
 	boolean isRed = false;
 
+	Player cellOwner;
+
 	private static String[] strMarkers = {" ", "#", "Y", "R"};
 
 	public Cell() {
@@ -51,6 +53,14 @@ public class Cell  {
 		str +="["+occupied+"]";
 
 		return str;
+	}
+
+	public void setCellOwner(Player p) {
+		cellOwner = p;
+	}
+
+	public Player getCellOwner() {
+		return cellOwner;
 	}
 
 	// class test

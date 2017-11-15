@@ -3,8 +3,8 @@
  */
 public class AI_Player extends Player {
 
-	public AI_Player(String name, int turnOrder, boolean isBot) {
-
+	public AI_Player(String name, boolean ifYellow, boolean isBot) {
+		super(name, ifYellow);
 	}
 
 }

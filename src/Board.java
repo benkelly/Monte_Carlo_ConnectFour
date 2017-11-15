@@ -1,12 +1,23 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ben on 13/11/2017.
  */
 public class Board extends ArrayList<List<Cell>> {
+	private static Board instance;
+
+	public static Board getInstance() {
+		if (instance == null) { instance = new Board();}
+		return instance;
+	}
+
+
 
 	static  int MAX_COSTOM_COL = 11;
+	static  int DO_NOT_COUNT_CELLS = 2;
 
 	int ogColumns = 7;
 	int ogHeight =  6;
@@ -41,12 +52,29 @@ public class Board extends ArrayList<List<Cell>> {
 		for (int i = 0; i < amount; i++) {
 			list.add(0 + (int)(Math.random() * tottal));
 		}
+
+		boolean ifDuplicates = false;
+		while (!ifDuplicates) {
+			int duplicateDiff = list.size();
+			Set<Integer> hs = new HashSet<>();
+			hs.addAll(list);
+			list.clear();
+			list.addAll(hs);
+			duplicateDiff = duplicateDiff - list.size();
+			if (duplicateDiff > 0) {
+				for (int i = 0; i < duplicateDiff; i++) {
+					list.add(0 + (int) (Math.random() * tottal));
+				}
+			} else {
+				ifDuplicates = true;
+			}
+		}
 		return  list;
 	}
 
 
 	public void createBoard(Integer[] columnHieght) {
-		ArrayList<Integer> NonExistentList = getRandomCells(columnHieght, 2);
+		ArrayList<Integer> NonExistentList = getRandomCells(columnHieght, DO_NOT_COUNT_CELLS);
 
 		if(columnHieght.length > maxColumns) {
 			if(columnHieght.length > MAX_COSTOM_COL) {
@@ -91,6 +119,7 @@ public class Board extends ArrayList<List<Cell>> {
 		}
 	}
 
+
 	public String OGprintBoard() {
 		String str = "";
 		for(List<Cell> cell : this) {
@@ -98,6 +127,8 @@ public class Board extends ArrayList<List<Cell>> {
 		}
 		return str;
 	}
+
+
 
 	public String printBoard() {
 		String str = "";
