@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ben on 14/11/2017.
@@ -28,10 +29,27 @@ public class GameState extends ArrayList<Player>{
 					gameOver=true;
 					break;
 				}
+				if(isBoardFull()) {
+					System.out.println("BOARD IS FULL GAME OVER!");
+					gameOver=true;
+					break;
+				}
 				System.out.println(Board.getInstance().printBoard());
 			}
 		}
 	}
+
+	private boolean isBoardFull() {
+		for(List<Cell> col : Board.getInstance()) {
+			for (Cell c : col) {
+				if(!c.isCellOccupied()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 
 
 	private boolean checkBoard(Player player, Cell c) {
@@ -72,14 +90,13 @@ public class GameState extends ArrayList<Player>{
 		if (column > 0) {
 			if (Board.getInstance().get(column).size() < Board.getInstance().get(column - 1).size()) {
 				if (player == Board.getInstance().get(column - 1).get(height + 1).getCellOwner()) {
-
 					if (column > 1) {
 						if (Board.getInstance().get(column - 1).size() < Board.getInstance().get(column - 2).size()) {
 							if (player == Board.getInstance().get(column - 2).get(height + 2).getCellOwner()) {
 								if (column > 2) {
 									if (Board.getInstance().get(column - 2).size()
 											< Board.getInstance().get(column - 3).size()) {
-										if (player == Board.getInstance().get(column - 2).get(height + 2).getCellOwner()) {
+										if (player == Board.getInstance().get(column-3).get(height+3).getCellOwner()) {
 											return true;
 										}
 									}
@@ -111,17 +128,18 @@ public class GameState extends ArrayList<Player>{
 										}
 									}
 								}
-							}
-							if (column > 0) {
-								if (Board.getInstance().get(column).size()
-										< Board.getInstance().get(column - 1).size()) {
-									if (player == Board.getInstance().get(column - 1).get(height + 1).getCellOwner()) {
-										if (column - 1 > 0) {
-											if (Board.getInstance().get(column - 1).size()
-													< Board.getInstance().get(column - 2).size()) {
-												if (player == Board.getInstance().get(column - 2).get
-														(height + 2).getCellOwner()) {
-													return true;
+
+								if (column > 0) {
+									if (Board.getInstance().get(column).size()
+											< Board.getInstance().get(column - 1).size()) {
+										if (player == Board.getInstance().get(column - 1).get(height + 1).getCellOwner()) {
+											if (column - 1 > 0) {
+												if (Board.getInstance().get(column - 1).size()
+														< Board.getInstance().get(column - 2).size()) {
+													if (player == Board.getInstance().get(column - 2).get
+															(height + 2).getCellOwner()) {
+														return true;
+													}
 												}
 											}
 										}
@@ -132,22 +150,21 @@ public class GameState extends ArrayList<Player>{
 					}
 				}
 			}
-			if (column < Board.getInstance().size() - 1) {
-				if (Board.getInstance().get(column).size()
-						>= Board.getInstance().get(column + 1).size()) {
-					if (height - 1 >= 0) {
-						if (player == Board.getInstance().get(column + 1).get(height - 1).getCellOwner()) {
-							if (column - 1 < Board.getInstance().size() - 1) {
-								if (Board.getInstance().get(column + 1).size()
-										>= Board.getInstance().get(column + 2).size()) {
-									if (height - 2 >= 0) {
-										if (player
-												== Board.getInstance().get(column + 2).get(height - 2)
-												.getCellOwner()) {
-										}
+		}
+		if (column < Board.getInstance().size()-1) {
+			if (height <= Board.getInstance().get(column+1).size()) {
+				System.out.println("\n\nh-1: "+(height-1)+", bor: "+Board.getInstance().get
+						(column+1)
+						.size());
+				if (height> 0) {
+					if (player == Board.getInstance().get(column+1).get(height-1).getCellOwner()) {
+						if (column - 1 < Board.getInstance().size() - 1) {
+							if (height-1 <= Board.getInstance().get(column+2).size()) {
+								if (height - 2 >= 0) {
+									if (player == Board.getInstance().get(column + 2).get(height - 2).getCellOwner()) {
 										if (column - 2 < Board.getInstance().size() - 1) {
-											if (Board.getInstance().get(column + 2).size()
-													>= Board.getInstance().get(column + 3).size()) {
+											if (height-2 <= Board.getInstance().get(column + 3)
+													.size()) {
 												if (height - 3 >= 0) {
 													if (player
 															== Board.getInstance().get(column + 3).get
@@ -166,6 +183,8 @@ public class GameState extends ArrayList<Player>{
 				}
 			}
 		}
+
+
 		//check daignoals <--
 		if (column < Board.getInstance().size()-1) {
 			if (height < Board.getInstance().get(column + 1).size() - 1) {

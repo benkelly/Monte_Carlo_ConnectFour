@@ -23,33 +23,37 @@ public class Player {
 
 
 	public Cell getMove() {
-
-		System.out.println(playerName+": Your move! Please enter a column letter (e.g. A, B or C)");
-		String inputStr = getConsoleInput();
-		char[] ch  = inputStr.toLowerCase().toCharArray();
-		int temp = (int)ch[0];
-		int temp_integer = 96; //for lower case ascii
-		int curColumn = (temp-temp_integer)-1;
-
-		if(curColumn >=0 & curColumn < Board.getInstance().maxColumns) {
-			int columnLevel = getColumnLevel(Board.getInstance().get(curColumn));
-			System.out.println("### columnLevel "+columnLevel);
-			if(columnLevel< Board.getInstance().get(curColumn).size() ) {
-				if(isYellow){
-					Board.getInstance().get(curColumn).get(columnLevel).isYellow = true;
-					Board.getInstance().get(curColumn).get(columnLevel).setCellOwner(this);
-				}
-				if(isRed){
-					Board.getInstance().get(curColumn).get(columnLevel).isRed = true;
-					Board.getInstance().get(curColumn).get(columnLevel).setCellOwner(this);
-				}
-				return Board.getInstance().get(curColumn).get(columnLevel);
+		int temp =0;
+		boolean inPutLoop = false;
+		while (!inPutLoop) {
+			System.out.println(playerName + ": Your move! Please enter a column letter (e.g. A, B or C)");
+			String inputStr = getConsoleInput();
+			if(!inputStr.equals("")) {
+				char[] ch = inputStr.toLowerCase().toCharArray();
+				temp = (int) ch[0];
 			}
-			else
-				System.out.println(playerName+"Column full! please select another one.");
-			return null;
+			int temp_integer = 96; //for lower case ascii
+			int curColumn = (temp - temp_integer) - 1;
+
+			if (curColumn >= 0 & curColumn < Board.getInstance().maxColumns) {
+				int columnLevel = getColumnLevel(Board.getInstance().get(curColumn));
+				System.out.println("### columnLevel " + columnLevel);
+				if (columnLevel < Board.getInstance().get(curColumn).size()) {
+					if (isYellow) {
+						Board.getInstance().get(curColumn).get(columnLevel).isYellow = true;
+						Board.getInstance().get(curColumn).get(columnLevel).setCellOwner(this);
+					}
+					if (isRed) {
+						Board.getInstance().get(curColumn).get(columnLevel).isRed = true;
+						Board.getInstance().get(curColumn).get(columnLevel).setCellOwner(this);
+					}
+					return Board.getInstance().get(curColumn).get(columnLevel);
+				} else
+					System.out.println(playerName + "Column full! please select another one.");
+				return null;
+			}
+			System.out.println(playerName + "Invalid Column!");
 		}
-		System.out.println(playerName+"Invalid Column!");
 		return null;
 	}
 
