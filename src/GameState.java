@@ -68,15 +68,15 @@ public class GameState extends ArrayList<Player>{
 				}
 			}
 		}
-		//check daignoals
-		if(column > 0) {
+		//check daignoals -->
+		if (column > 0) {
 			if (Board.getInstance().get(column).size() < Board.getInstance().get(column - 1).size()) {
 				if (player == Board.getInstance().get(column - 1).get(height + 1).getCellOwner()) {
 
-					if(column > 1) {
+					if (column > 1) {
 						if (Board.getInstance().get(column - 1).size() < Board.getInstance().get(column - 2).size()) {
 							if (player == Board.getInstance().get(column - 2).get(height + 2).getCellOwner()) {
-								if(column > 2) {
+								if (column > 2) {
 									if (Board.getInstance().get(column - 2).size()
 											< Board.getInstance().get(column - 3).size()) {
 										if (player == Board.getInstance().get(column - 2).get(height + 2).getCellOwner()) {
@@ -111,75 +111,161 @@ public class GameState extends ArrayList<Player>{
 										}
 									}
 								}
-
 							}
-						}
-
-					}
-				}
-			}
-		}
-		if (Board.getInstance().get(column).size()
-				>= Board.getInstance().get(column+1).size()) {
-			if(height-1>=0) {
-				if (player
-						== Board.getInstance().get(column+1).get(height-1).getCellOwner()) {
-					if (Board.getInstance().get(column+1).size()
-							>= Board.getInstance().get(column+2).size()) {
-						if(height-2>=0) {
-							if (player
-									== Board.getInstance().get(column+2).get(height-2)
-									.getCellOwner()) {
-							}
-							if (Board.getInstance().get(column+2).size()
-									>= Board.getInstance().get(column+3).size()) {
-								if(height-3>=0) {
-									if (player
-											== Board.getInstance().get(column+3).get
-											(height-3)
-											.getCellOwner()) {
-										return true;
+							if (column > 0) {
+								if (Board.getInstance().get(column).size()
+										< Board.getInstance().get(column - 1).size()) {
+									if (player == Board.getInstance().get(column - 1).get(height + 1).getCellOwner()) {
+										if (column - 1 > 0) {
+											if (Board.getInstance().get(column - 1).size()
+													< Board.getInstance().get(column - 2).size()) {
+												if (player == Board.getInstance().get(column - 2).get
+														(height + 2).getCellOwner()) {
+													return true;
+												}
+											}
+										}
 									}
 								}
 							}
 						}
 					}
 				}
-
+			}
+			if (column < Board.getInstance().size() - 1) {
+				if (Board.getInstance().get(column).size()
+						>= Board.getInstance().get(column + 1).size()) {
+					if (height - 1 >= 0) {
+						if (player == Board.getInstance().get(column + 1).get(height - 1).getCellOwner()) {
+							if (column - 1 < Board.getInstance().size() - 1) {
+								if (Board.getInstance().get(column + 1).size()
+										>= Board.getInstance().get(column + 2).size()) {
+									if (height - 2 >= 0) {
+										if (player
+												== Board.getInstance().get(column + 2).get(height - 2)
+												.getCellOwner()) {
+										}
+										if (column - 2 < Board.getInstance().size() - 1) {
+											if (Board.getInstance().get(column + 2).size()
+													>= Board.getInstance().get(column + 3).size()) {
+												if (height - 3 >= 0) {
+													if (player
+															== Board.getInstance().get(column + 3).get
+															(height - 3)
+															.getCellOwner()) {
+														return true;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
+		//check daignoals <--
+		if (column < Board.getInstance().size()-1) {
+			if (height < Board.getInstance().get(column + 1).size() - 1) {
+				if (player == Board.getInstance().get(column + 1).get(height + 1).getCellOwner()) {
+					if (column - 1 < Board.getInstance().size()) {
+						if (height + 1 < Board.getInstance().get(column + 2).size() - 1) {
+							if (player == Board.getInstance().get(column + 2).get(height + 2).getCellOwner()) {
 
-/*		for (int i=3; i<Board.getInstance().size(); i++){
-			*//*if(Board.getInstance().get(i).size() > height
-					&& Board.getInstance().get(i-1).size() > height
-					&& Board.getInstance().get(i-2).size() > height
-					&& Board.getInstance().get(i-3).size() > height) {*//*
-				for (int j=0; j<Board.getInstance().get(i).size()-3; j++){
-
-					if (Board.getInstance().get(i).get(j).getCellOwner() == player && Board
-							.getInstance().get(i-1).get(j+1).getCellOwner() == player && Board
-							.getInstance().get(i-2).get(j+2).getCellOwner() == player && Board
-							.getInstance().get(i-3).get(j+3).getCellOwner() == player){
-						return true;
+								if (column - 2 < Board.getInstance().size()) {
+									if (height + 1 < Board.getInstance().get(column + 3).size() - 1) {
+										if (player == Board.getInstance().get(column + 3).get
+												(height + 3).getCellOwner()) {
+											return true;
+										}
+									}
+									if (column > 0 && height - 1 >= 0) {
+										if (player == Board.getInstance().get(column - 1).get
+												(height - 1)
+												.getCellOwner()) {
+											return true;
+										}
+									}
+								}
+							}
+						}
 					}
-				//}
+					if (column > 0 && height - 1 > 0) {
+						if (height - 1 <= Board.getInstance().get(column - 1).size() - 1) {
+							if (player == Board.getInstance().get(column - 1).get(height - 1).getCellOwner()) {
+								if (height - 2 <= Board.getInstance().get(column - 2).size() -
+										1) {
+									if (player == Board.getInstance().get(column - 2).get
+											(height - 2).getCellOwner()) {
+									}
+									return true;
+
+								}
+							}
+						}
+					}
+					if (column > 0 && height - 1 >= 0) {
+						if (player
+								== Board.getInstance().get(column - 1).get(height - 1)
+								.getCellOwner()) {
+							System.out.println("!!!!!!!!!!!!!down left");
+							if (column - 1 > 0 && height - 2 >= 0) {
+								if (player
+										== Board.getInstance().get(column - 2).get(height - 2)
+										.getCellOwner()) {
+									System.out.println("!!!!!!!!!!!!!down left");
+									if (column - 2 > 0 && height - 3 >= 0) {
+										if (player
+												== Board.getInstance().get(column - 2).get(height - 2)
+												.getCellOwner()) {
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (column < Board.getInstance().size() && column > 0) {
+				//if(column>0){
+				if (Board.getInstance().get(column).size() - 1 == Board.getInstance().get(column - 1).size
+						()) {
+					if (height - 1 >= 0) {
+
+						if (player == Board.getInstance().get(column - 1).get(height - 1).getCellOwner()) {
+							if (column - 1 > 0) {
+								if (Board.getInstance().get(column - 1).size() - 1 == Board.getInstance()
+										.get(column - 2).size()) {
+									if (height - 2 >= 0) {
+										if (player
+												== Board.getInstance().get(column - 2).get(height - 2)
+												.getCellOwner()) {
+										}
+										if (column - 2 > 0) {
+											if (Board.getInstance().get(column - 2).size() - 1 == Board
+													.getInstance().get(column - 3).size()) {
+												if (height - 3 >= 0) {
+													if (player
+															== Board.getInstance().get(column - 3).get
+															(height - 3)
+															.getCellOwner()) {
+														return true;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
-		for (int i=3; i<Board.getInstance().size(); i++){
-			*//*if(Board.getInstance().get(i).size() > height
-					&& Board.getInstance().get(i-1).size() > height
-					&& Board.getInstance().get(i-2).size() > height
-					&& Board.getInstance().get(i-3).size() > height) {*//*
-				for (int j=3; j<Board.getInstance().get(i).size()-3; j++){
-					if (Board.getInstance().get(i).get(j).getCellOwner() == player && Board
-							.getInstance().get(i-1).get(j-1).getCellOwner() == player && Board
-							.getInstance().get(i-2).get(j-2).getCellOwner() == player && Board
-							.getInstance().get(i-3).get(j-3).getCellOwner() == player){
-						return true;
-					}
-				//}
-			}
-		}*/
 		return false;
 	}
 
