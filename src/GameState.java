@@ -288,9 +288,5 @@ public class GameState extends ArrayList<Player>{
 		gameState.gameLoop();
 		System.out.println("gameState.gameLoop!");
 
-
 	}
-
-
-
 }
