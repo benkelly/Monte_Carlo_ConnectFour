@@ -1,13 +1,13 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ben on 14/11/2017.
  */
-public class Player {
+public class Player implements Serializable {
 
 	String playerName = "";
 	boolean isYellow;
@@ -37,7 +37,7 @@ public class Player {
 
 			if (curColumn >= 0 & curColumn < Board.getInstance().maxColumns) {
 				int columnLevel = getColumnLevel(Board.getInstance().get(curColumn));
-				System.out.println("### columnLevel " + columnLevel);
+				//System.out.println("### columnLevel " + columnLevel);
 				if (columnLevel < Board.getInstance().get(curColumn).size()) {
 					if (isYellow) {
 						Board.getInstance().get(curColumn).get(columnLevel).isYellow = true;

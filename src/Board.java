@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -6,10 +7,28 @@ import java.util.Set;
 /**
  * Created by ben on 13/11/2017.
  */
-public class Board extends ArrayList<List<Cell>> {
+public class Board extends ArrayList<List<Cell>> implements Serializable {
 	private static Board instance;
 
-	public static Board getInstance() {
+	public Board deepClone() {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			return (Board) ois.readObject();
+		} catch (IOException e) {
+			return null;
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+
+
+
+	public static synchronized Board getInstance() {
 		if (instance == null) { instance = new Board();}
 		return instance;
 	}
@@ -156,6 +175,7 @@ public class Board extends ArrayList<List<Cell>> {
 	private String getCharForNumber(int i) {
 		return i > 0 && i < 27 ? String.valueOf((char)(i + 64)) : null;
 	}
+
 
 
 	// class test

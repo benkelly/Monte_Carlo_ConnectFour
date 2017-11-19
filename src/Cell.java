@@ -1,10 +1,31 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ben on 13/11/2017.
  */
-public class Cell  {
+public class Cell implements Serializable {
+
+	public Cell deepClone() {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			return (Cell) ois.readObject();
+		} catch (IOException e) {
+			return null;
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+
+
+
+
 
 	boolean isNonExistent = false;
 	boolean isYellow = false;
