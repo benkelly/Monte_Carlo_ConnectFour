@@ -26,6 +26,7 @@ public class GameState extends ArrayList<Player> implements Serializable {
 				}
 				if(checkBoard(curPlayer, c)) {
 					System.out.println("\n\n"+curPlayer.playerName+": YOU WIN!!!");
+					System.out.println(Board.getInstance().printBoard()+"\n\n");
 					gameOver=true;
 					break;
 				}

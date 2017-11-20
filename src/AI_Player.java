@@ -6,15 +6,12 @@ import java.util.Random;
  * Created by ben on 14/11/2017.
  */
 public class AI_Player extends Player {
-
 	Random rand = new Random();
 
 
 	public AI_Player(String name, boolean ifYellow, boolean isBot) {
 		super(name, ifYellow);
 	}
-
-
 
 	public Cell getMove() {
 		int column = suggestMonteCarlo();
@@ -40,21 +37,22 @@ public class AI_Player extends Player {
 	public int suggestMonteCarlo() {
 		int bestColumn = -1;
 		double bestRatio = 0;
-		//int TRAINING_GAMES = 10000;
-		int TRAINING_GAMES = 100;
+		int TRAINING_GAMES = 10000;
+		//int TRAINING_GAMES = 100;
 
 		for (int move = 0; move < Board.getInstance().size(); move++) {
-			if (getColumnLevel(Board.getInstance().get(move)) > 0) continue; /* No valid move. */
+			System.out.println("getColumnLevel(Board.getInstance().get(move)): "+getColumnLevel
+					(Board.getInstance().get(move)));
+			if (getColumnLevel(Board.getInstance().get(move)) < 0) {
+				//System.out.println("\t\t\tif (getColumnLevel(Board.getInstance().get(move)) >
+				// 0) {\n");
+				continue; /* No valid move. */
+			}
 			int won = 0, lost = 0;
 			for (int i = 0; i < TRAINING_GAMES; i++) {
 
+				// copies current board state for training.
 				Board curBoard = Board.getInstance().deepClone();
-
-			/*	System.out.println(Board.getInstance().printBoard());
-				System.out.println(Board.getInstance().size());
-
-				//System.out.println(curBoard.printBoard());
-				System.out.println(curBoard.size());*/
 
 				int columnLevel = getColumnLevel(curBoard.get(move));
 				if (columnLevel < curBoard.get(move).size()) {
@@ -66,11 +64,13 @@ public class AI_Player extends Player {
 						curBoard.get(move).get(columnLevel).isRed = true;
 						curBoard.get(move).get(columnLevel).setCellOwner(this);
 					}
-				}
+					//}
 
-				if (GameState.checkBoard(curBoard, this, curBoard.get(move).get(columnLevel))) {
-					System.out.println("\t\t\tWINNING MOVE RETURN");
-					return move;
+					// should play the move that wins immediately if there is one.
+					if (GameState.checkBoard(curBoard, this, curBoard.get(move).get(columnLevel))) {
+						//System.out.println("\t\t\tWINNING MOVE RETURN");
+						return move;
+					}
 				}
 
 				if (simulateGame(curBoard)) {
@@ -107,8 +107,6 @@ public class AI_Player extends Player {
 			yBot = this;
 		}
 
-
-
 		while (!gameLoop) {
 			int move = rand.nextInt(b.size());
 			int columnLevel = getColumnLevel(b.get(move));
@@ -122,7 +120,8 @@ public class AI_Player extends Player {
 					//System.out.println(b.printBoard()+"\nCOLUMN: "+move+", HEIGHT: "+columnLevel);
 					if (GameState.checkBoard(b, yBot, b.get(move).get(columnLevel))) {
 						//System.out.println("\n\n" + this.playerName + ": YOU WIN!!!");
-						return true;
+						if(yBot == this) return true;
+						else return false;
 					}
 				}else if (isRorY) {
 					b.get(move).get(columnLevel).isRed = true;
@@ -132,12 +131,13 @@ public class AI_Player extends Player {
 					//System.out.println(b.printBoard()+"\nCOLUMN: "+move+", HEIGHT: "+columnLevel);
 					if (GameState.checkBoard(b, rBot, b.get(move).get(columnLevel))) {
 						//System.out.println("\n\n" + this.playerName + ": YOU WIN!!!");
-						return true;
+						if(rBot == this) return true;
+						else return false;
 					}
 				}
 			}
 			if (GameState.isBoardFull(b)) {
-				System.out.println("BOARD IS FULL GAME OVER!");
+				//System.out.println("BOARD IS FULL GAME OVER!");
 				break;
 			}
 		}
