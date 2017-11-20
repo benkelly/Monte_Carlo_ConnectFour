@@ -93,8 +93,8 @@ public class Board extends ArrayList<List<Cell>> implements Serializable {
 
 
 	public void createBoard(Integer[] columnHieght) {
-		//ArrayList<Integer> NonExistentList = getRandomCells(columnHieght, DO_NOT_COUNT_CELLS);
-		ArrayList<Integer> NonExistentList = getRandomCells(columnHieght, 0);
+		ArrayList<Integer> NonExistentList = getRandomCells(columnHieght, DO_NOT_COUNT_CELLS);
+		//ArrayList<Integer> NonExistentList = getRandomCells(columnHieght, 0);
 
 		if(columnHieght.length > maxColumns) {
 			if(columnHieght.length > MAX_COSTOM_COL) {

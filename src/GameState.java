@@ -12,10 +12,20 @@ public class GameState extends ArrayList<Player> implements Serializable {
 	public GameState() {
 
 	}
-	private void getPlayers(){
-		this.add(new Player("ben", true));
-		this.add(new AI_Player("nessaBOT", false, true));
+
+	private void getPlayers(boolean allBots){
+		if(!allBots) {
+			this.add(new Player("Human", true));
+			this.add(new AI_Player("Robot", false, true));
+		}
+		else {
+			this.add(new AI_Player("T.E.N.C.H. 889B", true, true));
+			this.add(new AI_Player("Vulcan 2", false, true));
+
+		}
 	}
+
+
 
 	private void gameLoop(){
 		while (!gameOver){
@@ -293,7 +303,7 @@ public class GameState extends ArrayList<Player> implements Serializable {
 		System.out.println("Board.getInstance().createBoard!");
 
 		GameState gameState = new GameState();
-		gameState.getPlayers();
+		gameState.getPlayers(true);
 		System.out.println("gameState.getPlayers!");
 
 

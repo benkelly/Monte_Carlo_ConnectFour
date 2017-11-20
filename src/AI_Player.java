@@ -18,7 +18,6 @@ public class AI_Player extends Player {
 
 		if (column >= 0 & column < Board.getInstance().maxColumns) {
 			int columnLevel = getColumnLevel(Board.getInstance().get(column));
-			//System.out.println("### columnLevel " + columnLevel);
 			if (columnLevel < Board.getInstance().get(column).size()) {
 				if (isYellow) {
 					Board.getInstance().get(column).get(columnLevel).isYellow = true;
@@ -37,20 +36,20 @@ public class AI_Player extends Player {
 	public int suggestMonteCarlo() {
 		int bestColumn = -1;
 		double bestRatio = 0;
-		int TRAINING_GAMES = 10000;
-		//int TRAINING_GAMES = 100;
+		//int TRAINING_GAMES = 10000;
+		int TRAINING_GAMES = 1000;
 
+		System.out.println(playerName+": TRAINING....");
 		for (int move = 0; move < Board.getInstance().size(); move++) {
-			System.out.println("getColumnLevel(Board.getInstance().get(move)): "+getColumnLevel
-					(Board.getInstance().get(move)));
-			if (getColumnLevel(Board.getInstance().get(move)) < 0) {
-				//System.out.println("\t\t\tif (getColumnLevel(Board.getInstance().get(move)) >
-				// 0) {\n");
-				continue; /* No valid move. */
+
+			if (getColumnLevel(Board.getInstance().get(move))>=Board.getInstance().get(move).size())
+			{
+				System.out.println("Column: "+move+" is Full!");
+				//System.out.println(getColumnLevel(Board.getInstance().get(move)));
+				continue; // if column is full skip training.
 			}
 			int won = 0, lost = 0;
 			for (int i = 0; i < TRAINING_GAMES; i++) {
-
 				// copies current board state for training.
 				Board curBoard = Board.getInstance().deepClone();
 
@@ -64,30 +63,40 @@ public class AI_Player extends Player {
 						curBoard.get(move).get(columnLevel).isRed = true;
 						curBoard.get(move).get(columnLevel).setCellOwner(this);
 					}
-					//}
-
 					// should play the move that wins immediately if there is one.
 					if (GameState.checkBoard(curBoard, this, curBoard.get(move).get(columnLevel))) {
-						//System.out.println("\t\t\tWINNING MOVE RETURN");
+						System.out.println("\t\t\tWINNING MOVE RETURN");
 						return move;
 					}
-				}
 
-				if (simulateGame(curBoard)) {
-					won++;
-				}else {
-					lost++;
+					if (simulateGame(curBoard)) {
+						won++;
+					} else {
+						lost++;
+					}
 				}
 			}
 
 			double ratio = (double) won / (lost + 1);
-			System.out.println("Col " + move + " ratio: " + ratio);
+			System.out.println("Column: " + move + " ratio: " + ratio);
 
-			if (ratio > bestRatio) {
-				bestColumn = move;
+			if (ratio > bestRatio || bestColumn == -1) {
 				bestRatio = ratio;
+				if(ratio==0.0) {
+					// if unable to suggest move choose random. to avoid
+					// a stalemate looping situation.
+					int ranMove = rand.nextInt(Board.getInstance().size());
+					int colLevel = getColumnLevel(Board.getInstance().get(ranMove));
+					if (colLevel < Board.getInstance().get(ranMove).size()) {
+						bestColumn = ranMove;
+					}
+				}
+				else {
+					bestColumn = move;
+				}
 			}
 		}
+		System.out.println("\t\t\t\t\t\t\t\tBEST COLUMN: "+bestColumn);
 		return bestColumn;
 	}
 
@@ -98,17 +107,18 @@ public class AI_Player extends Player {
 		boolean isRorY = false;
 		if (this.isRed) {
 			isRorY = false;
-			yBot = new AI_Player("o0",true, true);
+			yBot = new AI_Player("Vulcan 3",true, true);
 			rBot = this;
 		}
 		if (this.isYellow) {
 			isRorY = true;
-			rBot = new AI_Player("o0",false, true);
+			rBot = new AI_Player("Vulcan 3",false, true);
 			yBot = this;
 		}
 
 		while (!gameLoop) {
 			int move = rand.nextInt(b.size());
+			//System.out.println("MOVE: "+move);
 			int columnLevel = getColumnLevel(b.get(move));
 			//System.out.println("### columnLevel " + columnLevel);
 			if (columnLevel < Board.getInstance().get(move).size()) {
@@ -116,7 +126,6 @@ public class AI_Player extends Player {
 					b.get(move).get(columnLevel).isYellow = true;
 					b.get(move).get(columnLevel).setCellOwner(yBot);
 					isRorY = true;
-
 					//System.out.println(b.printBoard()+"\nCOLUMN: "+move+", HEIGHT: "+columnLevel);
 					if (GameState.checkBoard(b, yBot, b.get(move).get(columnLevel))) {
 						//System.out.println("\n\n" + this.playerName + ": YOU WIN!!!");
@@ -127,7 +136,6 @@ public class AI_Player extends Player {
 					b.get(move).get(columnLevel).isRed = true;
 					b.get(move).get(columnLevel).setCellOwner(rBot);
 					isRorY = false;
-
 					//System.out.println(b.printBoard()+"\nCOLUMN: "+move+", HEIGHT: "+columnLevel);
 					if (GameState.checkBoard(b, rBot, b.get(move).get(columnLevel))) {
 						//System.out.println("\n\n" + this.playerName + ": YOU WIN!!!");
